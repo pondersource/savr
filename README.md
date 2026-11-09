@@ -1,5 +1,11 @@
 # Savr
 
+The [Ponder Source deployment](https://savr.pondersource.com) supports local
+reading and remoteStorage sync. For websites that block direct capture, use the
+[browser extension](browser-extension/README.md) pointed at
+`https://savr.pondersource.com`, paste content from the **Advanced** form, or set
+your own proxy under **Preferences → CORS Proxy**.
+
 Savr is an app for saving online content to read later.
 
 **Use Savr here (hosted app): https://savr.link**

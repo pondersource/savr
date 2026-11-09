@@ -97,7 +97,7 @@ async function doPublish(): Promise<void> {
 
     await publicClient.storeFile("application/json", PUBLIC_EXPORT_FILENAME, json);
 
-    const publicUrl = publicClient.getItemURL(PUBLIC_EXPORT_FILENAME) ?? state.publicUrl;
+    const publicUrl = (await publicClient.getItemURL(PUBLIC_EXPORT_FILENAME)) ?? state.publicUrl;
 
     const newState = load();
     newState.dirty = false;
