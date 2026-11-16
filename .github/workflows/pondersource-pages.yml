@@ -28,8 +28,6 @@ jobs:
       - run: npm run build:prod
         env:
           VITE_CORS_PROXY: ""
-          VITE_GOOGLE_DRIVE_API_KEY: ""
-          VITE_DROPBOX_API_KEY: ""
       - name: Prepare custom domain and client routes
         run: |
           printf '%s\n' 'savr.pondersource.com' > dist/CNAME

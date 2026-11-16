@@ -91,6 +91,9 @@ async function doPublish(): Promise<void> {
 
   try {
     const storage = await init();
+    if (storage.remoteStorage.backend === "googledrive") {
+      throw new Error("Google Drive supports syncing articles, but public sharing is unavailable.");
+    }
     const publicClient = storage.remoteStorage.scope(PUBLIC_CLIENT_SCOPE);
     const articles = await db.articles.toArray();
     const json = JSON.stringify(articles);

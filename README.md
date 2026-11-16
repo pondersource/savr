@@ -390,3 +390,21 @@ A bookmarklet is a small piece of JavaScript code stored as a bookmark in your b
 Bookmarklets work across all browsers and don't require any extensions or special permissions. They're a simple, lightweight way to add functionality to any website.
 
 Learn more about bookmarklets on [Wikipedia](https://en.wikipedia.org/wiki/Bookmarklet).
+
+
+## PonderSource storage providers
+
+Public OAuth application identifiers are configured in `src/config/storage-providers.json`. These are
+client IDs/app keys, never client secrets. The shared PonderSource Dropbox
+registration uses an app folder so these apps can share their remoteStorage data.
+Google Drive can sync private data, but rs.js does not support public sharing URLs for that backend.
+
+Register the exact app origin (without a trailing slash) as the OAuth callback.
+Hyperdraft uses `https://hyperdraft.pondersource.com/write/` instead. Apps with
+nested routes return to their registered callback before starting provider sign-in.
+
+The PonderSource Google OAuth project is `pondersource-apps`. It currently runs
+in Testing mode with `michiel@unhosted.org` as a test user; public availability
+requires completing the consent branding and Google verification requirements.
+The Dropbox app is **PonderSource Apps** (app key `gaezgoax9khjilj`), with
+additional users enabled in development mode (up to 500 users).

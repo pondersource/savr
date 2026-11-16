@@ -1,3 +1,5 @@
+import storageApiKeys from "./storage-providers.json";
+
 // Environment configuration for different deployment modes
 export interface EnvironmentConfig {
   isDebugMode: boolean;
@@ -69,9 +71,9 @@ export const environmentConfig: EnvironmentConfig = {
   apiKeys: {
     googleDrive: getEnvVar(
       "VITE_GOOGLE_DRIVE_API_KEY",
-      "165908882916-eg939u0ptdpbusn6pn63he9ntlspffmn.apps.googleusercontent.com",
+      storageApiKeys.googledrive,
     ),
-    dropbox: getEnvVar("VITE_DROPBOX_API_KEY", "c53glfgceos23cj"),
+    dropbox: getEnvVar("VITE_DROPBOX_API_KEY", storageApiKeys.dropbox),
   },
   telemetry: {
     // Default empty => telemetry off (self-host builds collect nothing).

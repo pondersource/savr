@@ -1,4 +1,5 @@
 import RemoteStorage from "remotestoragejs";
+import { configureProviderRedirects } from "./provider-redirects";
 import BaseClient from "remotestoragejs/release/types/baseclient";
 import { minimatch } from "minimatch";
 import { db } from "../db";
@@ -194,6 +195,7 @@ function initRemote() {
       googledrive: environmentConfig.apiKeys.googleDrive,
       dropbox: environmentConfig.apiKeys.dropbox,
     });
+    configureProviderRedirects(remoteStorage);
     remoteStorage.access.claim("savr", "rw");
 
     const client = remoteStorage.scope("/savr/");
