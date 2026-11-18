@@ -62,7 +62,7 @@
     "react-i18next": "^17.0.18",
     "react-markdown": "^10.1.0",
     "remotestorage-widget": "^1.7.0",
-    "remotestoragejs": "file:vendor/remotestoragejs-2.0.0-beta.10-pondersource.3.tgz",
+    "remotestoragejs": "file:vendor/remotestoragejs-2.0.0-beta.10-pondersource.4.tgz",
     "showdown": "^2.1.0",
     "tailwind-merge": "^2.6.0",
     "uri-js": "^4.4.1",
