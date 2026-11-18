@@ -17,7 +17,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - uses: extractions/setup-just@v4
-      - run: npm ci
+      - run: ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci
       # Each step is a Justfile recipe, so `just ci` runs the same list locally.
       - name: Lint
         run: just lint
@@ -42,7 +42,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - run: npm ci
+      - run: ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci
       - name: Remove Google Chrome apt source
         # The ubuntu-latest image ships a dl.google.com chrome-stable apt source
         # that intermittently serves a corrupt Packages.gz (hash-sum mismatch),

@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - run: ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci
       - run: npm test -- --runInBand
       - run: npm run build:prod
         env:
