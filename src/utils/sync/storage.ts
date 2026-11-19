@@ -1,4 +1,11 @@
 import RemoteStorage from "remotestoragejs";
+import { scopedModule, withPublicLinks, attachSolid } from "@pondersource/rs-apps";
+export type SavrClient = Pick<BaseClient, "getListing" | "getFile" | "storeFile" | "remove" | "on"> & {
+  putFile(path: string, data: string | ArrayBuffer, type: string): Promise<unknown>;
+  getItemURL(path: string): Promise<string | undefined>;
+  removePublicFile(path: string): Promise<unknown>;
+};
+type SavrStorage = RemoteStorage & { savr: SavrClient };
 import { configureProviderRedirects } from "./provider-redirects";
 import BaseClient from "remotestoragejs/release/types/baseclient";
 import { minimatch } from "minimatch";
@@ -77,14 +84,14 @@ function emitDiagnostic(category: string, data?: Record<string, unknown>) {
 //   }
 // }
 
-let store: Promise<{ remoteStorage: RemoteStorage; client: BaseClient }> | null = null;
+let store: Promise<{ remoteStorage: RemoteStorage; client: SavrClient }> | null = null;
 
 function init() {
   if (!store) {
     store = (async () => {
       const remoteStorage = await initRemote();
 
-      const client = remoteStorage.scope("/savr/");
+      const client = (remoteStorage as SavrStorage).savr;
 
       return { remoteStorage, client };
     })();
@@ -97,7 +104,7 @@ let remotePrms: Promise<RemoteStorage> | undefined;
 // Exposed so syncMissingArticles() can trigger a reconcile on demand
 let triggerReconcile: (() => Promise<void>) | null = null;
 
-async function recursiveList(client: BaseClient, path = ""): Promise<string[]> {
+async function recursiveList(client: SavrClient, path = ""): Promise<string[]> {
   try {
     const listing = await client.getListing(path);
     const files: string[] = [];
@@ -115,7 +122,7 @@ async function recursiveList(client: BaseClient, path = ""): Promise<string[]> {
   }
 }
 
-async function glob(client: BaseClient, pattern: string, basePath = ""): Promise<string[]> {
+async function glob(client: SavrClient, pattern: string, basePath = ""): Promise<string[]> {
   try {
     const allFiles = await recursiveList(client, basePath);
     return allFiles.filter((filePath) => minimatch(filePath, pattern));
@@ -127,7 +134,7 @@ async function glob(client: BaseClient, pattern: string, basePath = ""): Promise
 
 // Process a single article.json file and insert it into IndexedDB immediately
 async function processArticleFile(
-  client: BaseClient,
+  client: SavrClient,
   filePath: string,
   retryCount = 0,
   source: string = "change-event"
@@ -178,6 +185,7 @@ async function processArticleFile(
 function initRemote() {
   remotePrms = new Promise<RemoteStorage>((resolve) => {
     const remoteStorage = new RemoteStorage({
+      modules: [withPublicLinks(scopedModule("savr", ["getListing", "getFile", "storeFile", "remove", "on"]))],
       logging: false,
       // Disable local (fireInitial) change events. By default RS fires a change event
       // for every locally-cached file on every `ready` event so the app can hydrate
@@ -196,9 +204,10 @@ function initRemote() {
       dropbox: environmentConfig.apiKeys.dropbox,
     });
     configureProviderRedirects(remoteStorage);
+    attachSolid(remoteStorage);
     remoteStorage.access.claim("savr", "rw");
 
-    const client = remoteStorage.scope("/savr/");
+    const client = (remoteStorage as SavrStorage).savr;
     remoteStorage.caching.enable("/savr/");
 
     let isSyncing = false;
@@ -697,7 +706,7 @@ async function deleteArticleStorage(articleSlug: string): Promise<{
 }
 
 async function recursiveDeleteDirectory(
-  client: BaseClient,
+  client: SavrClient,
   directoryPath: string
 ): Promise<{
   success: boolean;

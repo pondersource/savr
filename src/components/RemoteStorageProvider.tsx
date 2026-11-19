@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 import RemoteStorage from "remotestoragejs";
-import { init, syncMissingArticles } from "~/utils/sync/storage";
+import { init, syncMissingArticles, type SavrClient } from "~/utils/sync/storage";
 import { db } from "~/utils/db";
 import { isDebugMode } from "~/config/environment";
-import BaseClient from "remotestoragejs/release/types/baseclient";
 import { useLocation } from "@tanstack/react-router";
 import { SYNC_ENABLED_COOKIE_NAME, SYNC_SETTING_EVENT } from "~/utils/cookies";
 
@@ -12,7 +11,7 @@ type RemoteStorageWidget = { attach: (id: string) => void };
 
 type RemoteStorageContextType = {
   remoteStorage: RemoteStorage | null;
-  client: BaseClient | null;
+  client: SavrClient | null;
   widget: RemoteStorageWidget | null;
   connected: boolean;
 };
@@ -41,7 +40,7 @@ const getSyncEnabled = (): boolean => {
 
 export const RemoteStorageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [remoteStorage, setRemoteStorage] = useState<RemoteStorage | null>(null);
-  const [client, setClient] = useState<BaseClient | null>(null);
+  const [client, setClient] = useState<SavrClient | null>(null);
   const [widget, setWidget] = useState<RemoteStorageWidget | null>(null);
   const [connected, setConnected] = useState<boolean>(false);
   const [syncEnabled, setSyncEnabled] = useState<boolean>(true);
@@ -73,7 +72,7 @@ export const RemoteStorageProvider: React.FC<{ children: React.ReactNode }> = ({
       // import.meta.env.VITE_DEBUG — the env var is a string, and "false" is truthy.
       if (typeof window !== "undefined" && isDebugMode()) {
         (window as unknown as { remoteStorage: RemoteStorage }).remoteStorage = store;
-        (window as unknown as { remoteStorageClient: BaseClient }).remoteStorageClient = client;
+        (window as unknown as { remoteStorageClient: SavrClient }).remoteStorageClient = client;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).savrDb = db;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

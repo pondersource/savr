@@ -5,7 +5,6 @@ import { init } from "../sync/storage";
 // Writing to "public/public-export.json" within the /savr/ scope puts the file at
 // /savr/public/... which is private. Using a /public/savr/-scoped client is correct.
 export const PUBLIC_EXPORT_FILENAME = "public-export.json";
-const PUBLIC_CLIENT_SCOPE = "/public/savr/";
 
 const STORAGE_KEY = "savr-public-export-state";
 const DEBOUNCE_MS = 45_000;
@@ -91,16 +90,13 @@ async function doPublish(): Promise<void> {
 
   try {
     const storage = await init();
-    if (storage.remoteStorage.backend === "googledrive") {
-      throw new Error("Google Drive supports syncing articles, but public sharing is unavailable.");
-    }
-    const publicClient = storage.remoteStorage.scope(PUBLIC_CLIENT_SCOPE);
+    const publicFiles = storage.client;
     const articles = await db.articles.toArray();
     const json = JSON.stringify(articles);
 
-    await publicClient.storeFile("application/json", PUBLIC_EXPORT_FILENAME, json);
+    await publicFiles.putFile(PUBLIC_EXPORT_FILENAME, json, "application/json");
 
-    const publicUrl = (await publicClient.getItemURL(PUBLIC_EXPORT_FILENAME)) ?? state.publicUrl;
+    const publicUrl = (await publicFiles.getItemURL(PUBLIC_EXPORT_FILENAME)) ?? state.publicUrl;
 
     const newState = load();
     newState.dirty = false;
@@ -145,8 +141,8 @@ export async function disablePublicExport(): Promise<{
 
   try {
     const storage = await init();
-    const publicClient = storage.remoteStorage.scope(PUBLIC_CLIENT_SCOPE);
-    await publicClient.remove(PUBLIC_EXPORT_FILENAME);
+    const publicFiles = storage.client;
+    await publicFiles.removePublicFile(PUBLIC_EXPORT_FILENAME);
     const newState = load();
     newState.publicUrl = undefined;
     newState.lastError = undefined;

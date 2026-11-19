@@ -87,7 +87,7 @@ export async function removeArticle(slug: string): Promise<void> {
 // summarizer, incoming sync) can't clobber each other's fields with stale
 // copies.
 export async function patchArticleMetadata(
-  storeClient: BaseClient,
+  storeClient: Pick<BaseClient, "storeFile">,
   slug: string,
   patch: Partial<Article>,
   options?: { skipPublicExport?: boolean }

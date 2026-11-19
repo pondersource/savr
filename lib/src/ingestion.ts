@@ -451,7 +451,7 @@ function stringToSlug(str: string): string {
 // already taken by a different article. Re-ingesting the same URL keeps the
 // same slug (idempotent).
 export async function finalizeSlug(
-  storageClient: BaseClient | null,
+  storageClient: Pick<BaseClient, "getFile" | "storeFile"> | null,
   article: Article
 ): Promise<void> {
   if (!article.slug) {
@@ -723,7 +723,7 @@ export function readabilityToArticle(
 }
 
 export async function ingestHtml(
-  storageClient: BaseClient | null,
+  storageClient: Pick<BaseClient, "getFile" | "storeFile"> | null,
   html: string,
   contentType: string,
   url: string | null,
@@ -749,7 +749,7 @@ export async function ingestHtml(
  * reject.
  */
 export async function ingestRaw(
-  storageClient: BaseClient | null,
+  storageClient: Pick<BaseClient, "getFile" | "storeFile"> | null,
   params: {
     content: string;
     contentType?: "auto" | "text/html" | "text/markdown" | "text/plain";
@@ -800,7 +800,7 @@ export async function ingestRaw(
  * @param rawHtml  the source stored verbatim as raw.html
  */
 async function persistArticle(
-  storageClient: BaseClient | null,
+  storageClient: Pick<BaseClient, "getFile" | "storeFile"> | null,
   article: Article,
   content: string,
   rawHtml: string,
@@ -927,7 +927,7 @@ function getTitleFromPdfUrl(url: string): string {
 }
 
 export async function ingestPdf(
-  storageClient: BaseClient | null,
+  storageClient: Pick<BaseClient, "getFile" | "storeFile"> | null,
   pdfBlob: Blob,
   url: string,
   sendMessage: (percent: number | null, message: string | null) => void,
@@ -1023,7 +1023,7 @@ function getTitleFromImageUrl(url: string): string {
 }
 
 export async function ingestImage(
-  storageClient: BaseClient | null,
+  storageClient: Pick<BaseClient, "getFile" | "storeFile"> | null,
   imageBlob: Blob,
   mimeType: string,
   url: string,
@@ -1128,7 +1128,7 @@ export async function ingestImage(
 }
 
 export async function ingestUrl(
-  storageClient: BaseClient | null,
+  storageClient: Pick<BaseClient, "getFile" | "storeFile"> | null,
   url: string,
   sendMessage: (percent: number | null, message: string | null) => void
 ) {
@@ -1265,7 +1265,7 @@ export async function ingestUrl(
 }
 
 // export async function ingestCurrentPage(
-//   storageClient: BaseClient | null,
+//   storageClient: Pick<BaseClient, "getFile" | "storeFile"> | null,
 //   html: string,
 //   contentType: string,
 //   url: string | null,
