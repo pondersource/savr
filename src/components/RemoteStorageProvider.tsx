@@ -88,7 +88,7 @@ export const RemoteStorageProvider: React.FC<{ children: React.ReactNode }> = ({
 
         // Create widget
         const { default: Widget } = await import("remotestorage-widget");
-        const newWidget = new Widget(store);
+        const newWidget = new Widget(store, { solidProviders: { allowAnyProvider: true } });
         newWidget.attach("remotestorage-container");
         widgetInstance = newWidget;
         setWidget(newWidget);

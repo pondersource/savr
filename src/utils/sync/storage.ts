@@ -1,5 +1,5 @@
 import RemoteStorage from "remotestoragejs";
-import { scopedModule, withPublicLinks, attachSolid } from "@pondersource/rs-apps";
+import { scopedModule, withPublicLinks } from "@pondersource/rs-apps";
 export type SavrClient = Pick<BaseClient, "getListing" | "getFile" | "storeFile" | "remove" | "on"> & {
   putFile(path: string, data: string | ArrayBuffer, type: string): Promise<unknown>;
   getItemURL(path: string): Promise<string | undefined>;
@@ -204,7 +204,7 @@ function initRemote() {
       dropbox: environmentConfig.apiKeys.dropbox,
     });
     configureProviderRedirects(remoteStorage);
-    attachSolid(remoteStorage);
+
     remoteStorage.access.claim("savr", "rw");
 
     const client = (remoteStorage as SavrStorage).savr;
