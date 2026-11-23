@@ -211,6 +211,8 @@ export default defineConfig(() => {
           ],
         },
         workbox: {
+          // Keep the all-backend storage bundle available offline.
+          maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
           globPatterns: ["**/*.{js,css,html,ico,png,svg,webp}"],
           // /extension/firefox.xpi is a Netlify redirect to the signed add-on;
           // the app-shell fallback would otherwise swallow that navigation.
