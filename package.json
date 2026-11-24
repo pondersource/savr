@@ -61,7 +61,7 @@
     "react-dom": "^19.0.0",
     "react-i18next": "^17.0.18",
     "react-markdown": "^10.1.0",
-    "remotestorage-widget": "file:vendor/remotestorage-widget-1.8.2-pondersource.4-preview.9.tgz",
+    "remotestorage-widget": "file:vendor/remotestorage-widget-1.8.2-pondersource.5-preview.10.tgz",
     "remotestoragejs": "file:vendor/remotestoragejs-2.0.0-beta.10-pondersource.9-preview.9.tgz",
     "showdown": "^2.1.0",
     "tailwind-merge": "^2.6.0",
