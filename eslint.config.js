@@ -44,6 +44,19 @@ export default tseslint.config(
     },
   },
   {
+    files: ['atomic/**/*.js'],
+    languageOptions: {
+      globals: { document: 'readonly', window: 'readonly', URL: 'readonly' },
+    },
+  },
+  {
+    files: ['tests/atomic/**/*.cjs'],
+    languageOptions: {
+      globals: { require: 'readonly', Buffer: 'readonly', global: 'readonly' },
+    },
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
+  },
+  {
     ignores: [
       'dist/**',
       'node_modules/**',
