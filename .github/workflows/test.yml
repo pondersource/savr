@@ -25,6 +25,7 @@ jobs:
         run: just typecheck
       - name: Unit tests
         run: just test
+      - run: node --test tests/atomic/article.test.cjs
       - name: Cloudflare worker tests
         # The workers have no dependencies to install.
         run: just test-workers
