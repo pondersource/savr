@@ -184,6 +184,7 @@ async function processArticleFile(
 
 function initRemote() {
   remotePrms = new Promise<RemoteStorage>((resolve) => {
+    RemoteStorage.Atomic.loadSDK = () => import(/* webpackIgnore: true */ /* @vite-ignore */ new URL('atomic-sdk/index.mjs', document.baseURI).href);
     const remoteStorage = new RemoteStorage({
       modules: [withPublicLinks(scopedModule("savr", ["getListing", "getFile", "storeFile", "remove", "on"]))],
       logging: false,
